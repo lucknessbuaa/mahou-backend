@@ -1,0 +1,16 @@
+--index-url http://pypi.douban.com/simple
+
+Django
+mysql-python
+django-parsley
+django-auth-remember
+django-render-json
+django-render-csv
+python-memcached
+django-tables3
+django-mysqlpool
+uwsgi
+pillow
+requests
+redis
+django-active-tab
