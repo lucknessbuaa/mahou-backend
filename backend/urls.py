@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 #import views
-from tastypie.api import Api
 
 
 urlpatterns = patterns('backend.magician_views',
@@ -21,9 +20,3 @@ urlpatterns = urlpatterns + patterns('backend.show_views',
 urlpatterns = urlpatterns + patterns('backend.new_views',
     url(r'^new$','new'),
 )
-#urlpatterns = urlpatterns + patterns('backend.recommend_views',
- #   url(r'^recommend$','recommend'),
-  #  url(r'^recommend/csv$', 'csv'),
-#)
-
-

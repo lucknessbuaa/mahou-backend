@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
-from mahou import settings
-from tastypie.api import Api
+from django.conf import settings
+
 import base.views
 
 urlpatterns = patterns('',
@@ -13,8 +13,5 @@ urlpatterns = patterns('',
 
     url(r'^ajax-upload/', include('ajax_upload.urls')),
 
-    url(r'^backend/', include('backend.urls')),
-    #url(r'^API/input','backend.views.ajax_add'),
-    #url(r'^API/',include(v.urls)) 
-
+    url(r'^backend/', include('backend.urls'))
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

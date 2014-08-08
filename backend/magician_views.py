@@ -26,11 +26,13 @@ from backend.models import Magician
 from backend import models
 from ajax_upload.widgets import AjaxClearableFileInput
 
+
 logger = logging.getLogger(__name__)
+
 
 @require_GET
 @login_required
-@active_tab('Magician')
+@active_tab('magician')
 def magician(request):
     magician = Magician.objects.all()
     search = False
@@ -42,7 +44,7 @@ def magician(request):
     elif 'q' in request.GET and request.GET['q'] == "":
         return HttpResponseRedirect(request.path)
     table = MagicianTable(magician)
-    if search :
+    if search:
         table = MagicianTable(magician, empty_text='没有搜索结果')
     form = MagicianForm()
     RequestConfig(request, paginate={"per_page": 10}).configure(table)
