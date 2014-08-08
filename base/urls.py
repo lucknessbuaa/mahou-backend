@@ -1,17 +1,20 @@
 from django.conf.urls import patterns, include, url
-
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.conf.urls.static import static
+from mahou import settings
+from tastypie.api import Api
+import base.views
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'base.views.home', name='home'),
-    # url(r'^base/', include('base.foo.urls')),
+    url(r'^/?$', 'base.views.welcome'),
+    url(r'^login$', 'base.views.login'),
+    url(r'^login.json$','base.views.loginByJSON'),
+    url(r'^logout$','base.views.logout'),
+    url(r'^welcome$','base.views.welcome'),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^ajax-upload/', include('ajax_upload.urls')),
 
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
-)
+    url(r'^backend/', include('backend.urls')),
+    #url(r'^API/input','backend.views.ajax_add'),
+    #url(r'^API/',include(v.urls)) 
+
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
