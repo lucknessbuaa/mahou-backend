@@ -33,7 +33,7 @@ gulp.task('rjs', function(callback) {
 
     async.series([
         compile(["login"], "base/js"),
-        compile(["talk", "jobs", "recommend"], "backend/js")
+        compile(["magician", "show", "new"], "backend/js")
     ], callback);
 });
 
@@ -42,7 +42,7 @@ gulp.task('less', function() {
         .pipe(less({
             paths: [
                 'assets/less',
-                'components'
+                'assets/components'
             ]
         }))
         .pipe(gulp.dest('assets/css'));

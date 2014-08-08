@@ -1,0 +1,113 @@
+{% extends "scaffold.html" %}
+{% load django_tables2 %}
+
+{% block title %}
+节目信息 - 大魔术师
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/show.css">
+<link href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+{% include "navbar.html" with tab=request.nav.active_tab %}
+<div class="container">
+    <div class="btn-toolbar">
+      <a href="/backend/new">
+        <button class="btn btn-primary" id="create-show">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp;创建节目信息
+        </button>
+      </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% include "search.html" with action="show" value=request.GET.q href=request.path %}
+            节目信息
+        </div>
+        <div class="panel-body">
+            {% render_table table "table_template.html" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/template" id="form-tpl">
+    <form class="form-horizontal" role="form" method='POST'>
+        {{ form.pk }}
+        {{ form.show }}
+        <p class="alert" style="display: none;"></p>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.magician.id_for_label }}">
+                    {{ form.magician.label}}</label>
+            <div class="value">
+                {{ form.magician }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.start.id_for_label }}">
+                    {{ form.start.label }}
+            </label>
+            <div class="value">
+                {{ form.start }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.stop.id_for_label }}">
+                    {{ form.stop.label }}
+            </label>
+            <div class="value">
+                {{ form.stop }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field control-label" 
+                    for="{{ form.score1.id_for_label }}">
+                    {{ form.score1.label }}
+            </label>
+            <div class="value">
+                {{ form.score1 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score2.id_for_label }}">
+                    {{ form.score2.label }}
+            </label>
+            <div class="value" >
+                {{ form.score2 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score3.id_for_label }}">
+                    {{ form.score3.label }}
+            </label>
+            <div class="value" >
+                {{ form.score3 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+    </form> 
+</script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}requirejs/require.js">
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/show.js">
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+<script>
+    require(["show"]);
+</script>
+{% endblock %}

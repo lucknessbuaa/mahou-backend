@@ -1,0 +1,17 @@
+<div class="btn-group btn-group-sm"
+    data-pk="{{ record.pk }}"
+    data-magician="{{ record.magician }}"
+    data-show="{{ record.show }}"
+    data-cover="{{ MEDIA_URL }}{{ record.magician.cover }}"
+    data-start="{{ record.start }}"
+    data-stop="{{ record.stop }}"
+    data-score1="{{ record.score1 }}"
+    data-score2="{{ record.score2 }}"
+    data-score3="{{ record.score3 }}"
+    >
+
+    <button class="btn btn-default edit" title="edit">
+        <span class="glyphicon glyphicon-edit"></span>
+    </button>
+
+</div>

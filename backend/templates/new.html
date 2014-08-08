@@ -1,0 +1,392 @@
+{% extends "scaffold.html" %}
+{% load django_tables2 %}
+
+{% block title %}
+节目信息 - 大魔术师
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/new.css">
+<link href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+{% include "navbar.html" with tab=request.nav.active_tab %}
+<div class="container">
+    <form class="form-horizontal" role="form" method='POST'>
+      <fieldset>
+        <legend>开始时间</legend>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.start.id_for_label }}">
+                    {{ form.start.label }}
+            </label>
+            <div class="value">
+                {{ form.start }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>选手一</legend>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.name1.id_for_label }}">
+                    {{ form.name1.label}}</label>
+            <div class="value">
+                {{ form.name1 }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.start1.id_for_label }}">
+                    {{ form.start1.label }}
+            </label>
+            <div class="value">
+                {{ form.start1 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.stop1.id_for_label }}">
+                    {{ form.stop1.label }}
+            </label>
+            <div class="value">
+                {{ form.stop1 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score11.id_for_label }}">
+                    {{ form.score11.label }}
+            </label>
+            <div class="value">
+                {{ form.score11 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score12.id_for_label }}">
+                    {{ form.score12.label }}
+            </label>
+            <div class="value" >
+                {{ form.score12 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score13.id_for_label }}">
+                    {{ form.score13.label }}
+            </label>
+            <div class="value" >
+                {{ form.score13 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>选手二</legend>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.name2.id_for_label }}">
+                    {{ form.name2.label}}</label>
+            <div class="value">
+                {{ form.name2 }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.start2.id_for_label }}">
+                    {{ form.start2.label }}
+            </label>
+            <div class="value">
+                {{ form.start2 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.stop2.id_for_label }}">
+                    {{ form.stop2.label }}
+            </label>
+            <div class="value">
+                {{ form.stop2 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score21.id_for_label }}">
+                    {{ form.score21.label }}
+            </label>
+            <div class="value">
+                {{ form.score21 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score22.id_for_label }}">
+                    {{ form.score22.label }}
+            </label>
+            <div class="value" >
+                {{ form.score22 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score23.id_for_label }}">
+                    {{ form.score23.label }}
+            </label>
+            <div class="value" >
+                {{ form.score23 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>选手三</legend>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.name3.id_for_label }}">
+                    {{ form.name3.label}}</label>
+            <div class="value">
+                {{ form.name3 }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.start3.id_for_label }}">
+                    {{ form.start3.label }}
+            </label>
+            <div class="value">
+                {{ form.start3 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.stop3.id_for_label }}">
+                    {{ form.stop3.label }}
+            </label>
+            <div class="value">
+                {{ form.stop3 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score31.id_for_label }}">
+                    {{ form.score31.label }}
+            </label>
+            <div class="value">
+                {{ form.score31 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score32.id_for_label }}">
+                    {{ form.score32.label }}
+            </label>
+            <div class="value" >
+                {{ form.score32 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score33.id_for_label }}">
+                    {{ form.score33.label }}
+            </label>
+            <div class="value" >
+                {{ form.score33 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>选手四</legend>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.name4.id_for_label }}">
+                    {{ form.name4.label}}</label>
+            <div class="value">
+                {{ form.name4 }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.start4.id_for_label }}">
+                    {{ form.start4.label }}
+            </label>
+            <div class="value">
+                {{ form.start4 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.stop4.id_for_label }}">
+                    {{ form.stop4.label }}
+            </label>
+            <div class="value">
+                {{ form.stop4 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score41.id_for_label }}">
+                    {{ form.score41.label }}
+            </label>
+            <div class="value">
+                {{ form.score41 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score42.id_for_label }}">
+                    {{ form.score42.label }}
+            </label>
+            <div class="value" >
+                {{ form.score42 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score43.id_for_label }}">
+                    {{ form.score43.label }}
+            </label>
+            <div class="value" >
+                {{ form.score43 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>选手五</legend>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.name5.id_for_label }}">
+                    {{ form.name5.label}}</label>
+            <div class="value">
+                {{ form.name5 }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.start5.id_for_label }}">
+                    {{ form.start5.label }}
+            </label>
+            <div class="value">
+                {{ form.start5 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.stop5.id_for_label }}">
+                    {{ form.stop5.label }}
+            </label>
+            <div class="value">
+                {{ form.stop5 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score51.id_for_label }}">
+                    {{ form.score51.label }}
+            </label>
+            <div class="value">
+                {{ form.score51 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score52.id_for_label }}">
+                    {{ form.score52.label }}
+            </label>
+            <div class="value" >
+                {{ form.score52 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score53.id_for_label }}">
+                    {{ form.score53.label }}
+            </label>
+            <div class="value" >
+                {{ form.score53 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>选手六</legend>
+        <div class="form-group">
+            <label class="field required control-label"
+                    for="{{ form.name6.id_for_label }}">
+                    {{ form.name6.label}}</label>
+            <div class="value">
+                {{ form.name6 }}
+                <ul class="parsley-error-list" style="diaplay: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.start6.id_for_label }}">
+                    {{ form.start6.label }}
+            </label>
+            <div class="value">
+                {{ form.start6 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.stop6.id_for_label }}">
+                    {{ form.stop6.label }}
+            </label>
+            <div class="value">
+                {{ form.stop6 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.score61.id_for_label }}">
+                    {{ form.score61.label }}
+            </label>
+            <div class="value">
+                {{ form.score61 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score62.id_for_label }}">
+                    {{ form.score62.label }}
+            </label>
+            <div class="value" >
+                {{ form.score62 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+            <label class="field required control-label" 
+                    for="{{ form.score63.id_for_label }}">
+                    {{ form.score63.label }}
+            </label>
+            <div class="value" >
+                {{ form.score63 }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;"></div>
+      </fieldset>
+      <fieldset>
+        <legend>结束时间</legend>
+        <div class="form-group">
+            <label class="field required control-label" 
+                    for="{{ form.stop.id_for_label }}">
+                    {{ form.stop.label }}
+            </label>
+            <div class="value">
+                {{ form.stop }}
+                <ul class="parsley-error-list" style="display: none"></ul>
+            </div>
+        </div>
+      </fieldset>
+        <div class="form-group">
+          <button class="col-xs-1 col-xs-offset-5 btn btn-primary btn-lg" type="button" value="提交" name="hello" style="margin-top: 20px; margin-bottom: 100px;">提交</button>
+        </div>
+    </form> 
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}requirejs/require.js">
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/new.js">
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
+<script>
+    require(["new"]);
+</script>
+{% endblock %}

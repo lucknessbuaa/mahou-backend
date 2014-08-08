@@ -13,7 +13,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'base'
+    'base',
+    'backend',
+    'ajax_upload',
+    'django_tables2',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,9 +71,15 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = ''
+#MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_DIRS = (
+    'assets',
+    'assets/components',
+    'backend',
+    'ajax_upload/static',
+    'ajax_uploads',
     os.path.join(BASE_DIR, "assets"),
 )
 
