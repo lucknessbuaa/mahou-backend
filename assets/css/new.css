@@ -8642,6 +8642,9 @@ td.url a {
 td.cover {
   max-width: 150px;
 }
+td.show {
+  display: table-cell;
+}
 .field {
   position: relative;
   min-height: 1px;
@@ -8671,4 +8674,7 @@ td.cover {
 }
 .ajax-upload {
   padding-top: 5px;
+}
+fieldset {
+  margin-bottom: 20px;
 }

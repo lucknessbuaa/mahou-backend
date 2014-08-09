@@ -29,6 +29,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>选手一</legend>
         <div class="form-group">
@@ -84,6 +85,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>选手二</legend>
         <div class="form-group">
@@ -139,6 +141,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>选手三</legend>
         <div class="form-group">
@@ -194,6 +197,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>选手四</legend>
         <div class="form-group">
@@ -249,6 +253,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>选手五</legend>
         <div class="form-group">
@@ -304,6 +309,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>选手六</legend>
         <div class="form-group">
@@ -359,6 +365,7 @@
         </div>
         <div style="margin-bottom:20px;"></div>
       </fieldset>
+
       <fieldset>
         <legend>结束时间</legend>
         <div class="form-group">
@@ -372,9 +379,13 @@
             </div>
         </div>
       </fieldset>
-        <div class="form-group">
-          <button class="col-xs-1 col-xs-offset-5 btn btn-primary btn-lg" type="button" value="提交" name="hello" style="margin-top: 20px; margin-bottom: 100px;">提交</button>
+
+      <div class="form-group">
+        <div class="col-xs-2 col-xs-offset-5" style="margin-bottom: 20px;">
+            <button class="btn btn-primary btn-block" type="button" 
+                data-loading-text='提交' value="提交" name="hello">提交</button>    
         </div>
+      </div>
     </form> 
 </div>
 {% endblock %}
@@ -384,9 +395,5 @@
 </script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/new.js">
 </script>
-<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
-<script>
-    require(["new"]);
-</script>
+<script> require(["new"]); </script>
 {% endblock %}

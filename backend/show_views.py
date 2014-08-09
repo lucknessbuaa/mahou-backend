@@ -29,6 +29,7 @@ from ajax_upload.widgets import AjaxClearableFileInput
 
 logger = logging.getLogger(__name__)
 
+
 @require_GET
 @login_required
 @active_tab('show')
@@ -217,6 +218,7 @@ def delete_show(request):
             'cover': AjaxClearableFileInput
         }
 
+
 @require_POST
 @json
 def edit_show(request, id):
@@ -228,6 +230,7 @@ def edit_show(request, id):
         return {'ret_code': RET_CODES["ok"]}
 
     return with_valid_form(form, _edit_show)
+
 
 @require_POST
 @json

@@ -218,6 +218,10 @@ define(function(require) {
     });
 
     $(function() {
+        $("th.show, td.show").removeClass('show');
+    });
+
+    $(function() {
         var modal = new modals.ActionModal();
         modal.setAction(function(id) {
             return deleteShow(id).then(function() {
@@ -241,5 +245,4 @@ define(function(require) {
             modal.show();
         });
     });
-
 });

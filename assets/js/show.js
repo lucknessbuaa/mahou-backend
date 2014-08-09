@@ -13473,6 +13473,10 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
     });
 
     $(function() {
+        $("th.show, td.show").removeClass('show');
+    });
+
+    $(function() {
         var modal = new modals.ActionModal();
         modal.setAction(function(id) {
             return deleteShow(id).then(function() {
@@ -13496,6 +13500,5 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
             modal.show();
         });
     });
-
 });
 

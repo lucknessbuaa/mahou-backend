@@ -9,6 +9,7 @@ var require = {
         'select2': 'select2/select2',
         'moment': 'moment/moment',
         'chart': 'js/ChartNew',
+        'ajax_upload': 'ajax_upload/js/ajax-upload-widget',
 
         'jquery.ui.core': 'jqueryui/ui/jquery.ui.core',
         'jquery.ui.mouse': 'jqueryui/ui/jquery.ui.mouse',
@@ -44,7 +45,9 @@ var require = {
         'jquery.ui.sortable': {
             deps: ['jquery', 'jquery.ui.core', 'jquery.ui.mouse', 'jquery.ui.widget']
         },
-
+        'ajax_upload': {
+            deps: ['jquery', 'jquery.iframe-transport']
+        },
         'jquery.serializeObject': {
             deps: ['jquery']
         },

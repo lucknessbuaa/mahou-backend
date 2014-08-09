@@ -2,7 +2,9 @@
 import logging
 from datetime import datetime
 
+
 from underscore import _ as us
+from django.db import transaction
 from django.db.models import Q
 from django import forms
 from django.core.cache import get_cache
@@ -26,16 +28,9 @@ from backend.models import Magician, Show, Magician_Show
 from backend import models
 from ajax_upload.widgets import AjaxClearableFileInput
 
+
 logger = logging.getLogger(__name__)
 
-@require_GET
-@login_required
-@active_tab('new')
-def new(request):
-    form = NewForm()
-    return render(request, "new.html", {
-        "form": form
-    })
 
 class NewForm(forms.Form):
 
@@ -201,8 +196,40 @@ class NewForm(forms.Form):
     stop = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
-    def clean(self):
-        cleaned_data = self.cleaned_data = super(ShowForm, self).clean()
 
-        return cleaned_data
+@require_GET
+@login_required
+@active_tab('new')
+def new(request):
+    form = NewForm()
+    return render(request, "new.html", {
+        "form": form
+    })
 
+
+@transaction.atomic
+def add_show(form):
+    show = Show(start=form.cleaned_data['start'], end=form.cleaned_data['stop'])
+    show.save()
+
+    for i in range(1, 7):
+        magician_show = Magician_Show(magician=form.cleaned_data['name' + str(i)],
+                                      show=show,
+                                      start=form.cleaned_data['start' + str(i)],
+                                      stop=form.cleaned_data['stop' + str(i)],
+                                      score1=form.cleaned_data['score' + str(i) + '1'],
+                                      score2=form.cleaned_data['score' + str(i) + '2'],
+                                      score3=form.cleaned_data['score' + str(i) + '3'])
+        magician_show.save()
+
+
+@require_POST
+@login_required
+@json
+def add(request):
+    form = NewForm(request.POST)
+    if not form.is_valid():
+        return {'ret_code': 1001}
+    
+    add_show(form)
+    return {'ret_code': 0}

@@ -2,6 +2,7 @@ define(function(require) {
     require("jquery");
     require("jquery.serializeObject");
     require("jquery.iframe-transport");
+    require("ajax_upload"),
     require("bootstrap");
     require("moment");
     require("bootstrap-datetimepicker");
@@ -9,28 +10,15 @@ define(function(require) {
     require("select2");
     require("parsley");
     var csrf_token = require("django-csrf-support");
-    var when = require("when/when");
-    var _ = require("underscore");
-    require("backbone/backbone");
 
-    var errors = require("errors");
-    var utils = require("utils");
-    var mapErrors = utils.mapErrors;
-    var throwNetError = utils.throwNetError;
-    var handleErrors = utils.handleErrors;
-    var formProto = require("formProto");
-    var formValidationProto = require("formValidationProto");
-    var modals = require('modals');
-    var SimpleUpload = require("simple-upload");
-
-    $(function(){
+    $(function() {
         $form = $("form.form-horizontal");
         form = $form[0];
 
         $(form.start).datetimepicker({
             maxView: 2,
             minView: 0,
-            language: 'zh-CN',    
+            language: 'zh-CN',
             format: 'yyyy-mm-dd hh:ii',
             viewSelect: 'month',
             autoclose: "true",
@@ -39,29 +27,29 @@ define(function(require) {
         $(form.stop).datetimepicker({
             maxView: 2,
             minView: 0,
-            language: 'zh-CN',    
+            language: 'zh-CN',
             format: 'yyyy-mm-dd hh:ii',
             viewSelect: 'month',
             autoclose: "true",
         });
 
         var i = 1;
-        for(i = 1; i <= 6; i++){
-            $("#id_start"+i).datetimepicker({
+        for (i = 1; i <= 6; i++) {
+            $("#id_start" + i).datetimepicker({
                 maxView: 2,
                 minView: 0,
-                language: 'zh-CN',    
+                language: 'zh-CN',
                 format: 'yyyy-mm-dd hh:ii',
                 viewSelect: 'month',
                 autoclose: "true",
                 minuteStep: 1,
             });
         }
-        for(i = 1; i <= 6; i++){
-            $("#id_stop"+i).datetimepicker({
+        for (i = 1; i <= 6; i++) {
+            $("#id_stop" + i).datetimepicker({
                 maxView: 2,
                 minView: 0,
-                language: 'zh-CN',    
+                language: 'zh-CN',
                 format: 'yyyy-mm-dd hh:ii',
                 viewSelect: 'month',
                 autoclose: "true",
@@ -69,33 +57,40 @@ define(function(require) {
             });
         }
 
-        function addShow(data) {
-            var request = $.post("/backend/show/add", {
-                data: data
-            }, 'json');
-            return when(request).then(mapErrors, throwNetError);
-        }
-
-        $(form.hello).click(function(){
+        $(form.hello).click(function() {
             var data = getData();
-            var onComplete = _.bind(function() {
-                this.trigger('save');
-            }, this);
-            var onReject = _.bind(function(err) {
-                handleErrors(err,
-                    _.bind(this.onAuthFailure, this),
-                    _.bind(this.onCommonErrors, this),
-                    _.bind(this.onUnknownError, this)
-                );
-            }, this);
+            var $this = $(this);
 
-            var onFinish = _.bind(function() {
-                this.tip('成功！', 'success');
-                utils.reload(500);
-            }, this);
+            $this.button('loading');
+            $.post('/backend/new/add', data, "json").then(function(data) {
+                if (data.ret_code === 0) {
+                    alert('创建成功');
+                    window.location = '/backend/show';
+                } else {
+                    alert('数据错误');
+                }
+            }).always(function() {
+                $this.button('reset');
+            });
+
+            // var onComplete = _.bind(function() {
+            //     this.trigger('save');
+            // }, this);
+            // var onReject = _.bind(function(err) {
+            //     handleErrors(err,
+            //         _.bind(this.onAuthFailure, this),
+            //         _.bind(this.onCommonErrors, this),
+            //         _.bind(this.onUnknownError, this)
+            //     );
+            // }, this);
+
+            // var onFinish = _.bind(function() {
+            //     this.tip('成功！', 'success');
+            //     utils.reload(500);
+            // }, this);
         });
 
-        function getData(){
+        function getData() {
             var data = {
                 start: $(form.start).val(),
 
@@ -103,7 +98,7 @@ define(function(require) {
                 start1: $(form.start1).val(),
                 stop1: $(form.stop1).val(),
                 score11: $(form.score11).val(),
-                score12: $(form.score12).val(), 
+                score12: $(form.score12).val(),
                 score13: $(form.score13).val(),
 
                 name2: $(form.name2).val(),
@@ -148,6 +143,5 @@ define(function(require) {
 
         $(form.start).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
         $(form.stop).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
-
     });
 });

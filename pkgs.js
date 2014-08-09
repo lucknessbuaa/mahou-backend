@@ -26,6 +26,7 @@ module.exports = {
         'zh-CN': "assets/components/smalot-bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN",
         'multiline': 'assets/components/multiline/browser',
 
+        'ajax_upload': 'ajax_upload/static/ajax_upload/js/ajax-upload-widget',
         //base modules
         'codes': 'assets/js/codes',
         'errors': 'assets/js/errors',
@@ -74,6 +75,9 @@ module.exports = {
         },
         'jquery.cookie': {
             deps: ['jquery']
+        },
+        'ajax_upload': {
+            deps: ['jquery', 'jquery.iframe-transport']
         },
         'parsley': {
             deps: ['jquery']

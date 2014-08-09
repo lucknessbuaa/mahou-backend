@@ -92,18 +92,19 @@ class MagicianForm(forms.ModelForm):
 @require_POST
 @json
 def add_magician(request):
-
     def _add_magician(form):
         form.save()
         return {'ret_code': RET_CODES["ok"]}
 
     return with_valid_form(MagicianForm(request.POST), _add_magician)
 
+
 @require_POST
 @json
 def delete_magician(request):
     Magician.objects.filter(pk=request.POST["id"]).delete()
     return {'ret_code': RET_CODES['ok']}
+
 
 @require_POST
 @json

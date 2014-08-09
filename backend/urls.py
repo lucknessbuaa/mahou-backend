@@ -19,4 +19,5 @@ urlpatterns = urlpatterns + patterns('backend.show_views',
 
 urlpatterns = urlpatterns + patterns('backend.new_views',
     url(r'^new$','new'),
+    url(r'^new/add$','add')
 )
