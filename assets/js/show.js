@@ -13211,7 +13211,19 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
             this.$("[name=start]").attr({
                 readOnly: "true"
             });
+            this.$("[name=scoretime]").attr({
+                readOnly: "true"
+            });
             this.$("[name=start]").datetimepicker({
+                maxView: 2,
+                minView: 0,
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii',
+                viewSelect: 'month',
+                autoclose: "true",
+                minuteStep: 1,
+            });
+            this.$("[name=scoretime]").datetimepicker({
                 maxView: 2,
                 minView: 0,
                 language: 'zh-CN',
@@ -13231,16 +13243,19 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
             });
 
             this.$("[name=start]").datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+            this.$("[name=scoretime]").datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
             this.$("[name=stop]").datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
         },
 
         setShow: function(show) {
-            _.each(['pk', 'show', 'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(attr) {
+            _.each(['pk', 'show', 'magician', 'start', 'scoretime', 'stop', 'score1', 'score2', 'score3'], _.bind(function(attr) {
                 this.el[attr].value = show[attr];
             }, this));
             $(this.el.magician).val(show.magician).trigger('change');
             var tempTime1 = moment(show['start'], "MMM DD,YYYY,h:m a");
             this.el['start'].value = tempTime1.format("YYYY-MM-DD HH:mm");
+            var tempTime1 = moment(show['scoretime'], "MMM DD,YYYY,h:m a");
+            this.el['scoretime'].value = tempTime1.format("YYYY-MM-DD HH:mm");
             var tempTime = moment(show['stop'], "MMM DD,YYYY,h:m a");
             this.el['stop'].value = tempTime.format("YYYY-MM-DD HH:mm");
         },
@@ -13253,7 +13268,7 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
                 url: ''
             };
             data = _.defaults(data, defaults);
-            _.each(['pk', 'magician', 'show', 'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(attr) {
+            _.each(['pk', 'magician', 'show', 'scoretime', 'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(attr) {
                 this.el[attr].value = data[attr];
             }, this));
         },
@@ -13271,7 +13286,7 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
         },
 
         clear: function() {
-            _.each(['pk', 'magcian', 'show',  'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(field) {
+            _.each(['pk', 'magcian', 'show',  'start', 'scoretime', 'stop', 'score1', 'score2', 'score3'], _.bind(function(field) {
                 $(this.el[field]).val('').trigger('change');
             }, this));
 
@@ -13280,7 +13295,7 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
 
         onHide: function() {
             this.clear();
-            this.clearErrors(['pk', 'magician', 'show', 'start', 'stop', 'score1', 'score2', 'score3'])
+            this.clearErrors(['pk', 'magician', 'show', 'start', 'scoretime', 'stop', 'score1', 'score2', 'score3'])
             $(this.el).parsley('destroy');
         },
 
@@ -13291,7 +13306,7 @@ define('show',['require','jquery','jquery.serializeObject','jquery.iframe-transp
         },
 
         validate: function() {
-            this.clearErrors(['pk', 'magician', 'show', 'start', 'stop', 'score1', 'score2', 'score3']);
+            this.clearErrors(['pk', 'magician', 'show', 'start', 'scoretime', 'stop', 'score1', 'score2', 'score3']);
             this.clearTip();
 
             return true;

@@ -72,6 +72,36 @@ class ShowTable(tables.Table):
     score3 = tables.columns.Column(verbose_name='评分三', empty_values=(), orderable=False)
     ops = tables.columns.TemplateColumn(verbose_name='操作', template_name='show_ops.html', orderable=False)
 
+    def render_score1(score1, value):
+        if value == 1:
+            return 'A'
+        elif value == 11:
+            return 'J'
+        elif value == 13:
+            return 'K'
+        else:
+            return value
+
+    def render_score2(score2, value):
+        if value == 1:
+            return 'A'
+        elif value == 11:
+            return 'J'
+        elif value == 13:
+            return 'K'
+        else:
+            return value
+
+    def render_score3(score3, value):
+        if value == 1:
+            return 'A'
+        elif value == 11:
+            return 'J'
+        elif value == 13:
+            return 'K'
+        else:
+            return value
+
     class Meta:
         model = Magician_Show
         empty_text = u'没有节目信息'
@@ -99,6 +129,9 @@ class ShowForm(forms.ModelForm):
     start = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
+    scoretime = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
     stop = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
@@ -124,72 +157,6 @@ class ShowForm(forms.ModelForm):
 
     class Meta:
         model = Magician_Show
-
-
-@require_POST
-@json
-def add_show(request):
-    start = request.POST["data[start]"]
-
-    name1 = request.POST["data[name1]"]
-    start1 = request.POST['data[start1]']
-    stop1 = request.POST["data[stop1]"]
-    score11 = request.POST['data[score11]']
-    score12 = request.POST['data[score12]']
-    score13 = request.POST['data[score13]']
-
-    name2 = request.POST["data[name2]"]
-    start2 = request.POST['data[start2]']
-    stop2 = request.POST["data[stop2]"]
-    score21 = request.POST['data[score21]']
-    score22 = request.POST['data[score22]']
-    score23 = request.POST['data[score23]']
-
-    name3 = request.POST["data[name3]"]
-    start3 = request.POST['data[start3]']
-    stop3 = request.POST["data[stop3]"]
-    score31 = request.POST['data[score31]']
-    score32 = request.POST['data[score32]']
-    score33 = request.POST['data[score33]']
-
-    name4 = request.POST["data[name4]"]
-    start4 = request.POST['data[start4]']
-    stop4 = request.POST["data[stop4]"]
-    score41 = request.POST['data[score41]']
-    score42 = request.POST['data[score42]']
-    score43 = request.POST['data[score43]']
-
-    name5 = request.POST["data[name5]"]
-    start5 = request.POST['data[start5]']
-    stop5 = request.POST["data[stop5]"]
-    score51 = request.POST['data[score51]']
-    score52 = request.POST['data[score52]']
-    score53 = request.POST['data[score53]']
-
-    name6 = request.POST["data[name6]"]
-    start6 = request.POST['data[start6]']
-    stop6 = request.POST["data[stop6]"]
-    score61 = request.POST['data[score61]']
-    score62 = request.POST['data[score62]']
-    score63 = request.POST['data[score63]']
-
-    end = request.POST['data[stop]']
-
-    cursor = connection.cursor()
-
-    cursor.execute("insert into backend_show(start, end) values(%s,%s)", [start, end])
-    cursor.execute("select id from backend_show where start = %s", [start])
-    show = cursor.fetchone()
-    cursor.execute("insert into backend_magician_show(magician_id, show_id, start, stop, score1,score2, score3) values(%s,%s,%s,%s,%s,%s,%s)", [name1, show, start1, stop1, score11, score12, score13])
-    cursor.execute("insert into backend_magician_show(magician_id, show_id, start, stop, score1,score2, score3) values(%s,%s,%s,%s,%s,%s,%s)", [name2, show, start2, stop2, score21, score22, score23])
-    cursor.execute("insert into backend_magician_show(magician_id, show_id, start, stop, score1,score2, score3) values(%s,%s,%s,%s,%s,%s,%s)", [name3, show, start3, stop3, score31, score32, score33])
-    cursor.execute("insert into backend_magician_show(magician_id, show_id, start, stop, score1,score2, score3) values(%s,%s,%s,%s,%s,%s,%s)", [name4, show, start4, stop4, score41, score42, score43])
-    cursor.execute("insert into backend_magician_show(magician_id, show_id, start, stop, score1,score2, score3) values(%s,%s,%s,%s,%s,%s,%s)", [name5, show, start5, stop5, score51, score52, score53])
-    cursor.execute("insert into backend_magician_show(magician_id, show_id, start, stop, score1,score2, score3) values(%s,%s,%s,%s,%s,%s,%s)", [name6, show, start6, stop6, score61, score62, score63])
-    
-    return {'ret_code': REET_CODES["ok"]} 
-    
-
 
 @require_POST
 @json
