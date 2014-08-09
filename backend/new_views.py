@@ -31,7 +31,6 @@ from ajax_upload.widgets import AjaxClearableFileInput
 
 logger = logging.getLogger(__name__)
 
-
 class NewForm(forms.Form):
 
     start = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
@@ -217,7 +216,7 @@ class NewForm(forms.Form):
 
 @require_GET
 @login_required
-@active_tab('new')
+@active_tab('show')
 def new(request):
     form = NewForm()
     return render(request, "new.html", {
@@ -234,6 +233,7 @@ def add_show(form):
         magician_show = Magician_Show(magician=form.cleaned_data['name' + str(i)],
                                       show=show,
                                       start=form.cleaned_data['start' + str(i)],
+                                      scoretime=form.cleaned_data['scoretime'+ str(i)],
                                       stop=form.cleaned_data['stop' + str(i)],
                                       score1=form.cleaned_data['score' + str(i) + '1'],
                                       score2=form.cleaned_data['score' + str(i) + '2'],
