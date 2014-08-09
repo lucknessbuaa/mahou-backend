@@ -14,12 +14,12 @@ urlpatterns = urlpatterns + patterns('backend.show_views',
     url(r'^show/delete$','delete_show'),
     url(r'^show/requireMag$','requireMag'),
     url(r'^show/(?P<id>\d+)$','edit_show'),
-    url(r'^api/moible', 'mobile'),
+    url(r'^api/mobile', 'record_mobile'),
+    url(r'^api/stat', 'magician_score'),
+    url(r'^api/score$', 'record_score'),
     
     # TODO
-    url(r'^api/score', 'record_score'),
-    url(r'^api/stat', 'stat'),
-    url(r'^api/scores', 'accuracy'),
+    url(r'^api/scores', 'scores')
 )
 
 urlpatterns = urlpatterns + patterns('backend.new_views',

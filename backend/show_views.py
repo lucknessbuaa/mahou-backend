@@ -232,6 +232,7 @@ def ensureAudience(token):
 
 
 @require_POST
+@csrf_exempt
 @json
 def record_mobile(request):
     token = request.POST.get('token', None)
@@ -248,14 +249,15 @@ def record_mobile(request):
 
 
 @require_POST
+@csrf_exempt
 @json
 def record_score(request):
     token = request.POST.get('token', None)
     show_id = request.POST.get('show_id', None)
     magician_id = request.POST.get('magician_id', None)
-    score = request.POST.get('score', None)
+    score = int(request.POST.get('score', None))
 
-    if not phone or not token or not show_id or not score:
+    if not magician_id or not token or not show_id or not score:
         return {'ret_code': 1001}
 
     audience = ensureAudience(token)
@@ -264,12 +266,25 @@ def record_score(request):
 
     AudienceScore(audience=audience, show=show, magician=magician, score=score).save()
     # TODO add accuracy
-    score3 = Magician_Show.objects.get(magician=magician, shhow=show)
+    audienceAc = None
+    try:
+        audienceAc = AudienceAccuracy.objects.get(audience=audience, show=show)
+    except:
+        audienceAc = AudienceAccuracy(audience=audience, show=show)
+        audienceAc.save()
+
+    score3 = Magician_Show.objects.get(magician=magician, show=show)
+    logger.debug(str(score3.score3))
+    logger.debug(str(score))
     if score == score3.score3:
-        audience.score += 1
-     
+        audienceAc.accuracy = audienceAc.accuracy + 1
+        audienceAc.save()
+        
     return {'ret_code': 0}
 
+
+@csrf_exempt
+@json
 def magician_score(request):
     show_id = request.POST.get('show_id', None)
     magician_id = request.POST.get('magician_id', None)
@@ -279,98 +294,54 @@ def magician_score(request):
 
     magician = Magician.objects.get(pk=magician_id)
     show = Show.objects.get(pk=show_id)
-    scores = AudienceScore(show=show, magician=magician)
-    def mapScore(scores):
-        score1 = 0
-        score3 = 0
-        score5 = 0
-        score7 = 0
-        score9 = 0
-        score11 = 0
-        score13 = 0
+
+    total = AudienceScore.objects.filter(show=show, magician=magician).count()
     
-        for item in scores:
-           'score' + str(item.score) += 1
+    def mapScore(score):
+        count = AudienceScore.objects.filter(show=show, magician=magician, score=score).count()
+        return count * 1.0 / total
 
-        sum = score1 + score3 + score5 + score7 + score9 +score11 + score13
-        if sum == 0:
-            per1 = 0
-            per3 = 0
-            per5 = 0
-            per7 = 0
-            per9 = 0
-            per11 = 0
-            per13 = 0
-        else:
-            per1 = 1.0 * per1 / sum
-            per3 = 1.0 * per3 / sum
-            per5 = 1.0 * per5 / sum
-            per7 = 1.0 * per7 / sum
-            per9 = 1.0 * per9 / sum
-            per11 = 1.0 * per11 / sum
-            per13 = 1.0 * per13 / sum
-        return {
-            'scoreA': per1,
-            'score3': per3,
-            'score5': per5,
-            'score7': per7,
-            'score9': per9,
-            'scoreJ': per11,
-            'scoreK': per13,
-        }
+    percent = map(mapScore, [1, 3, 5, 7, 9, 11,13]) if total != 0 \
+                else [0, 0, 0, 0, 0, 0, 0]
 
-  percent = map(mapScore, scores)
-  return{
-      'ret_code': 0,
-      'percent': percent,
-  }
+    return{
+        'ret_code': 0,
+        'percent': percent,
+    }
 
 
-def accuracy(request):
-    token = request.POST.get('token', None)
-    show_id = request.POST.get('show_id', None)
+@require_GET
+@json
+def scores(request):
+    token = request.GET.get('token', None)
+    show_id = request.GET.get('show_id', None)
 
     audience = ensureAudience(token)
-    auScore = AudienceScore.objects.get(pk=show_id)
-    magician = Magician_Show.objects.get(pk=show_id)
-    def mapAuScore(auScore):
-        score1 = 0
-        score2 = 0
-        score3 = 0
-        score4 = 0
-        score5 = 0
-        score6 = 0
+    show = Show.objects.get(pk=show_id)
 
-        scoreA1 = 0
-        scoreA2 = 0
-        scoreA3 = 0
-        scoreA4 = 0
-        scoreA5 = 0
-        scoreA6 = 0
+    myScores = AudienceScore.objects.filter(audience=audience, show=show)
+    myScoreDict = {}
+    for score in myScores:
+        myScoreDict[str(score.magician.pk)] = score.score
+    
+    result = {
+        'scores': [],
+        'myScores': []
+    }
 
-        for subitem in magician:
-            i = 1
-            for item in auScore:
-                if item.magician == subitem.magician
+    scores = Magician_Show.objects.filter(show=show)
+    for score in scores:
+        result['scores'].append(score.score3)
+        key = str(score.magician.pk)
+        result['myScores'].append(myScoreDict.get(key, None))
 
+    records = AudienceAccuracy.objects.filter(audience=audience, show=show)
+    accuracy = 0 if records.count() == 0 else records[0].accuracy
+    result['count'] = AudienceAccuracy.objects.filter(accuracy__lt=accuracy).count()
+    result['acurracy'] = accuracy
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return{
+        'ret_code': 0,
+        'result': result
+    }
 

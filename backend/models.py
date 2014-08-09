@@ -44,7 +44,7 @@ class AudienceScore(models.Model):
     score = models.IntegerField()
 
     class Meta:
-        unique_together=(audience, show, magician)
+        unique_together=("audience", "show", "magician")
 
 
 class AudienceAccuracy(models.Model):
@@ -54,4 +54,4 @@ class AudienceAccuracy(models.Model):
     accuracy = models.IntegerField(default=0)
 
     class Meta:
-        unique_together=(audience, show, magician)
+        unique_together=("audience", "show")
