@@ -22,7 +22,6 @@ define(function(require) {
     var formProto = require("formProto");
     var formValidationProto = require("formValidationProto");
     var modals = require('modals');
-    var SimpleUpload = require("simple-upload");
 
     function modifyShow(data) {
         var request = $.post("/backend/show/" + data.pk, data, 'json');
@@ -198,14 +197,6 @@ define(function(require) {
         $create = $("#create-show");
         $create.click(function() {
             location.href("/backend/new");
-        });
-
-        var hello = new AjaxUploadWidget($('[name=cover]'), {
-            changeButtonText : "修改图片",
-            removeButtonText : "删除图片",
-            onError: function(data) {
-                toast('error', '图片上传失败，请重试。');
-            }
         });
 
         $("table").on("click", ".edit", function() {

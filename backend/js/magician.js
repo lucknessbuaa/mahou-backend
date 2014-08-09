@@ -8,6 +8,7 @@ define(function(require) {
     require("zh-CN");
     require("select2");
     require("parsley");
+    require("ajax_upload");
     var csrf_token = require("django-csrf-support");
     var when = require("when/when");
     var _ = require("underscore");
@@ -22,7 +23,6 @@ define(function(require) {
     var formProto = require("formProto");
     var formValidationProto = require("formValidationProto");
     var modals = require('modals');
-    var SimpleUpload = require("simple-upload");
 
     function modifyMagician(data) {
         var request = $.post("/backend/magician/" + data.pk, data, 'json');

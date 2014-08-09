@@ -7827,6 +7827,219 @@ define("select2", ["jquery"], function(){});
 
 define("parsley", ["jquery"], function(){});
 
+(function() {
+    var global = this;
+    var $ = global.$;
+    var console = global.console || {
+        log: function() {}
+    };
+
+    var AjaxUploadWidget = global.AjaxUploadWidget = function(element, options) {
+        this.options = {
+            changeButtonText: 'Change',
+            removeButtonText: 'Remove',
+            previewAreaClass: 'ajax-upload-preview-area',
+            previewFilenameLength: 30,
+            onUpload: null, // right before uploading to the server
+            onComplete: null,
+            onError: null,
+            onCancel: null,
+            onRemove: null
+        };
+        $.extend(this.options, options);
+        this.$element = $(element);
+        this.initialize();
+    };
+
+    AjaxUploadWidget.prototype.DjangoAjaxUploadError = function(message) {
+        this.name = 'DjangoAjaxUploadError';
+        this.message = message;
+    };
+    AjaxUploadWidget.prototype.DjangoAjaxUploadError.prototype = new Error();
+    AjaxUploadWidget.prototype.DjangoAjaxUploadError.prototype.constructor = AjaxUploadWidget.prototype.DjangoAjaxUploadError;
+
+    AjaxUploadWidget.prototype.initialize = function() {
+        var self = this;
+        this.name = this.$element.attr('name');
+
+        // Create a hidden field to contain our uploaded file name
+        this.$hiddenElement = $('<input type="text" style="display: none"/>')
+            .attr('name', this.name)
+            .val(this.$element.data('filename'));
+        this.$hiddenElement.data("required", this.$element.data("required"));
+        this.$hiddenElement.data("maxlength", this.$element.data("maxlength"));
+        this.$hiddenElement.change($.proxy(this.displaySelection, this));
+        this.$element.attr('name', ''); // because we don't want to conflict with our hidden field
+        this.$element.after(this.$hiddenElement);
+
+        // Initialize preview area and action buttons
+        this.$previewArea = $('<div class="' + this.options.previewAreaClass + '"></div>');
+        this.$element.before(this.$previewArea);
+
+        // Listen for when a file is selected, and perform upload
+        this.$element.on('change', function(evt) {
+            self.upload();
+        });
+        this.$changeButton = $('<button type="button" style="margin-right: 5px;" class="btn btn-sm btn-default btn-change"></button>')
+            .text(this.options.changeButtonText)
+            .on('click', function(evt) {
+                self.$element.show();
+                $(this).hide();
+            });
+        this.$element.after(this.$changeButton);
+
+        this.$removeButton = $('<button type="button" class="btn btn-sm btn-danger btn-remove"></button>')
+            .text(this.options.removeButtonText)
+            .on('click', function(evt) {
+                if (self.options.onRemove) {
+                    var result = self.options.onRemove.call(self);
+                    if (result === false) return;
+                }
+                self.$hiddenElement.val('');
+                self.displaySelection();
+            });
+        this.$changeButton.after(this.$removeButton);
+
+        this.displaySelection();
+    };
+
+
+    AjaxUploadWidget.prototype.upload = function() {
+        var self = this;
+
+        function _delete_deffered(func) {
+            return function(data) {
+                self.deferred = null;
+                func && func(data);
+            }
+        }
+
+        if (!this.$element.val()) return;
+        if (this.options.onUpload) {
+            var result = this.options.onUpload.call(this);
+            if (result === false) return;
+        }
+        this.$element.attr('name', 'file');
+        this.deferred = $.ajax(this.$element.data('upload-url'), {
+            iframe: true,
+            files: this.$element,
+            processData: false,
+            type: 'POST',
+            dataType: 'json',
+            success: _delete_deffered(function(data) {
+                self.uploadDone(data);
+            }),
+            error: _delete_deffered(function(data) {
+                self.uploadFail(data);
+            })
+        });
+    };
+
+    AjaxUploadWidget.prototype.uploadDone = function(data) {
+        // This handles errors as well because iframe transport does not
+        // distinguish between 200 response and other errors
+        if (data.errors) {
+            if (this.options.onError) {
+                this.options.onError.call(this, data);
+            } else {
+                console.log('Upload failed:');
+                console.log(data);
+            }
+        } else {
+            this.$hiddenElement.val(data.path);
+            var tmp = this.$element;
+            this.$element = this.$element.clone(true).val('');
+            tmp.replaceWith(this.$element);
+            this.displaySelection();
+            if (this.options.onComplete) this.options.onComplete.call(this, data.path);
+        }
+    };
+
+    AjaxUploadWidget.prototype.uploadFail = function(xhr) {
+        if (xhr.statusText == "abort") {
+            this.options.onCancel && this.options.onCancel.call(this);
+            return;
+        }
+
+        if (this.options.onError) {
+            this.options.onError.call(this);
+        } else {
+            console.log('Upload failed:');
+            console.log(xhr);
+        }
+    };
+
+    AjaxUploadWidget.prototype.displaySelection = function() {
+        var filename = this.$hiddenElement.val();
+
+        if (filename !== '') {
+            this.$previewArea.empty();
+            this.$previewArea.append(this.generateFilePreview(filename));
+
+            this.$previewArea.show();
+            this.$changeButton.show();
+            if (this.$element.data('required') === 'True') {
+                this.$removeButton.hide();
+            } else {
+                this.$removeButton.show();
+            }
+            this.$element.hide();
+        } else {
+            this.$previewArea.hide();
+            this.$changeButton.hide();
+            this.$removeButton.hide();
+            this.$element.val("");
+            this.$element.show();
+        }
+    };
+
+    AjaxUploadWidget.prototype.generateFilePreview = function(filename) {
+        // Returns the html output for displaying the given uploaded filename to the user.
+        var prettyFilename = this.prettifyFilename(filename);
+        var output = '<a href="' + filename + '" target="_blank">' + prettyFilename + '';
+        $.each(['jpg', 'jpeg', 'png', 'gif'], function(i, ext) {
+            if (filename.toLowerCase().slice(-ext.length) == ext) {
+                output += '<img src="' + filename + '"/>';
+                return false;
+            }
+        });
+        output += '</a>';
+        return output;
+    };
+
+    AjaxUploadWidget.prototype.prettifyFilename = function(filename) {
+        // Get rid of the folder names
+        var cleaned = filename.slice(filename.lastIndexOf('/') + 1);
+
+        // Strip the random hex in the filename inserted by the backend (if present)
+        var re = /^[a-f0-9]{32}\-/i;
+        cleaned = cleaned.replace(re, '');
+
+        // Truncate the filename
+        var maxChars = this.options.previewFilenameLength;
+        var elipsis = '...';
+        if (cleaned.length > maxChars) {
+            cleaned = elipsis + cleaned.slice((-1 * maxChars) + elipsis.length);
+        }
+        return cleaned;
+    };
+
+    AjaxUploadWidget.prototype.abort = function() {
+        if (!this.deferred) return;
+
+        this.deferred.abort();
+        this.$hiddenElement.val("").trigger('change');
+        this.$element.val("");
+    }
+
+    AjaxUploadWidget.autoDiscover = function(options) {
+        $('input[type="file"].ajax-upload').each(function(index, element) {
+            new AjaxUploadWidget(element, options);
+        });
+    };
+}).call(this);
+define("ajax_upload", ["jquery","jquery.iframe-transport"], function(){});
+
 /*!
  * jQuery Cookie Plugin v1.4.1
  * https://github.com/carhartl/jquery-cookie
@@ -13145,115 +13358,7 @@ define('modals',['require','jquery','underscore','backbone/backbone','multiline'
     };
 });
 
-define('simple-upload',['require','jquery','backbone/backbone','underscore','multiline'],function(require) {
-    require("jquery");
-    require("backbone/backbone");
-    var _ = require("underscore");
-    var multiline = require("multiline");
-
-    var tpl = _.template(multiline(function() {
-        /*@preserve
-        <div class="simple-upload">
-            <input type='hidden' name='<%= name %>'>
-            <input accept="image/*" type='file' name='file' id="<%= id %>">
-            <div class="preview" style="display: none"></div>
-        </div>
-        */
-        console.log
-    }));
-
-    var previewTpl = _.template(multiline(function() {
-        /*@preserve
-        <a class="thumbnail" href="<%= url %>" target="_blank">
-            <img class="img-responsive" src="<%= url %>">
-        </a>
-        */
-        console.log
-    }));
-
-    var SimpleUpload = Backbone.View.extend({
-        initialize: function(options) {
-            options = _.extend({
-                name: '',
-                id: ''
-            }, options || {});
-            _.extend(this, _.pick(options, "getUrl", "upload"));
-            this.setElement($(tpl(options).trim())[0]);
-
-            this.$file = this.$(':file');
-            this.$field = this.$('[type=hidden]');
-            this.$preview = this.$('.preview');
-        },
-
-        rightNow: function(timestamp, fn) {
-            this.timestamp = timestamp;
-            return _.bind(function() {
-                if (timestamp !== this.timestamp) {
-                    return;
-                }
-
-                if (_.isFunction(fn)) {
-                    fn.apply(null, arguments);
-                }
-            }, this);
-        },
-
-        events: {
-            'change :file': 'onFileSelected',
-            'change [type=hidden]': 'onFileChanged'
-        },
-
-        onFileSelected: function() {
-            var timestamp = _.now();
-            setTimeout(_.bind(function() {
-                this.$file.attr("disabled", "disabled");
-            }, this), 0);
-            this.upload(this.$file).then(
-                this.rightNow(timestamp, _.bind(this.onUploadDone, this)),
-                this.rightNow(timestamp, _.bind(this.onUploadFailed, this))
-            );
-        },
-
-        onFileChanged: function() {
-            var key = this.$field.val();
-            if (key) {
-                this.preview(this.getUrl(key));
-            } else {
-                this.$file.val('');
-                this.$preview.hide().empty();
-            }
-        },
-
-        onUploadFailed: function() {
-            this.setPath(null);
-            this.$file.removeAttr("disabled");
-            this.trigger('upload-failed');
-        },
-
-        onUploadDone: function(key) {
-            this.setPath(key || '');
-            this.$file.removeAttr("disabled");
-            this.trigger('upload-done');
-        },
-
-        preview: function(url) {
-            this.$preview.hide();
-            this.$preview.empty();
-            $(previewTpl({
-                url: url
-            }).trim()).appendTo(this.$preview);
-            this.$preview.show();
-        },
-
-        setPath: function(key) {
-            this.$field.val(key || '').trigger('change');
-            this.timestamp = _.now();
-        }
-    });
-
-    return SimpleUpload;
-});
-define('magician',['require','jquery','jquery.serializeObject','jquery.iframe-transport','bootstrap','moment','bootstrap-datetimepicker','zh-CN','select2','parsley','django-csrf-support','when/when','underscore','backbone/backbone','errors','utils','formProto','formValidationProto','modals','simple-upload'],function(require) {
+define('magician',['require','jquery','jquery.serializeObject','jquery.iframe-transport','bootstrap','moment','bootstrap-datetimepicker','zh-CN','select2','parsley','ajax_upload','django-csrf-support','when/when','underscore','backbone/backbone','errors','utils','formProto','formValidationProto','modals'],function(require) {
     require("jquery");
     require("jquery.serializeObject");
     require("jquery.iframe-transport");
@@ -13263,6 +13368,7 @@ define('magician',['require','jquery','jquery.serializeObject','jquery.iframe-tr
     require("zh-CN");
     require("select2");
     require("parsley");
+    require("ajax_upload");
     var csrf_token = require("django-csrf-support");
     var when = require("when/when");
     var _ = require("underscore");
@@ -13277,7 +13383,6 @@ define('magician',['require','jquery','jquery.serializeObject','jquery.iframe-tr
     var formProto = require("formProto");
     var formValidationProto = require("formValidationProto");
     var modals = require('modals');
-    var SimpleUpload = require("simple-upload");
 
     function modifyMagician(data) {
         var request = $.post("/backend/magician/" + data.pk, data, 'json');
