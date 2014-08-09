@@ -264,6 +264,113 @@ def record_score(request):
 
     AudienceScore(audience=audience, show=show, magician=magician, score=score).save()
     # TODO add accuracy
-
+    score3 = Magician_Show.objects.get(magician=magician, shhow=show)
+    if score == score3.score3:
+        audience.score += 1
+     
     return {'ret_code': 0}
+
+def magician_score(request):
+    show_id = request.POST.get('show_id', None)
+    magician_id = request.POST.get('magician_id', None)
     
+    if not show_id or not magician_id:
+        return {'ret_code': 1001}
+
+    magician = Magician.objects.get(pk=magician_id)
+    show = Show.objects.get(pk=show_id)
+    scores = AudienceScore(show=show, magician=magician)
+    def mapScore(scores):
+        score1 = 0
+        score3 = 0
+        score5 = 0
+        score7 = 0
+        score9 = 0
+        score11 = 0
+        score13 = 0
+    
+        for item in scores:
+           'score' + str(item.score) += 1
+
+        sum = score1 + score3 + score5 + score7 + score9 +score11 + score13
+        if sum == 0:
+            per1 = 0
+            per3 = 0
+            per5 = 0
+            per7 = 0
+            per9 = 0
+            per11 = 0
+            per13 = 0
+        else:
+            per1 = 1.0 * per1 / sum
+            per3 = 1.0 * per3 / sum
+            per5 = 1.0 * per5 / sum
+            per7 = 1.0 * per7 / sum
+            per9 = 1.0 * per9 / sum
+            per11 = 1.0 * per11 / sum
+            per13 = 1.0 * per13 / sum
+        return {
+            'scoreA': per1,
+            'score3': per3,
+            'score5': per5,
+            'score7': per7,
+            'score9': per9,
+            'scoreJ': per11,
+            'scoreK': per13,
+        }
+
+  percent = map(mapScore, scores)
+  return{
+      'ret_code': 0,
+      'percent': percent,
+  }
+
+
+def accuracy(request):
+    token = request.POST.get('token', None)
+    show_id = request.POST.get('show_id', None)
+
+    audience = ensureAudience(token)
+    auScore = AudienceScore.objects.get(pk=show_id)
+    magician = Magician_Show.objects.get(pk=show_id)
+    def mapAuScore(auScore):
+        score1 = 0
+        score2 = 0
+        score3 = 0
+        score4 = 0
+        score5 = 0
+        score6 = 0
+
+        scoreA1 = 0
+        scoreA2 = 0
+        scoreA3 = 0
+        scoreA4 = 0
+        scoreA5 = 0
+        scoreA6 = 0
+
+        for subitem in magician:
+            i = 1
+            for item in auScore:
+                if item.magician == subitem.magician
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

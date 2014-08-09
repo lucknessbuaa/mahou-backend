@@ -19,7 +19,7 @@ urlpatterns = urlpatterns + patterns('backend.show_views',
     # TODO
     url(r'^api/score', 'record_score'),
     url(r'^api/stat', 'stat'),
-    url(r'^api/scores', 'scores'),
+    url(r'^api/scores', 'accuracy'),
 )
 
 urlpatterns = urlpatterns + patterns('backend.new_views',
