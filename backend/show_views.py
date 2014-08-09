@@ -23,7 +23,7 @@ from django.http import HttpResponseRedirect
 
 from base.decorators import active_tab
 from base.utils import fieldAttrs, with_valid_form, RET_CODES
-from backend.models import Magician, Show, Magician_Show
+from backend.models import Magician, Show, Magician_Show, Audience, AudienceScore, AudienceAccuracy
 from backend import models
 from ajax_upload.widgets import AjaxClearableFileInput
 
@@ -218,3 +218,52 @@ def requireMag(request):
         'ret_code': RET_CODES['ok'],
         'selectMag': selectMag
     }
+
+
+def ensureAudience(token):
+    audience = None
+    try:
+        audience = Audience.objects.get(token=token)
+    except:
+        audience = Audience(token=token)
+        audience.save()
+
+    return audience
+
+
+@require_POST
+@json
+def record_mobile(request):
+    token = request.POST.get('token', None)
+    phone = request.POST.get('phone', None)
+
+    if not phone or not token:
+        return {'ret_code': 1001}
+
+    audience = ensureAudience(token)
+    audience.phone = phone
+    audience.save()
+
+    return {'ret_code': 0}
+
+
+@require_POST
+@json
+def record_score(request):
+    token = request.POST.get('token', None)
+    show_id = request.POST.get('show_id', None)
+    magician_id = request.POST.get('magician_id', None)
+    score = request.POST.get('score', None)
+
+    if not phone or not token or not show_id or not score:
+        return {'ret_code': 1001}
+
+    audience = ensureAudience(token)
+    show = Show.objects.get(pk=show_id)
+    magician = Magician.objects.get(pk=magician_id)
+
+    AudienceScore(audience=audience, show=show, magician=magician, score=score).save()
+    # TODO add accuracy
+
+    return {'ret_code': 0}
+    
