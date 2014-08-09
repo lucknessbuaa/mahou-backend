@@ -31,4 +31,27 @@ class Magician_Show(models.Model):
     score3 = models.IntegerField(verbose_name=u'score3')
      
     
+class Audience(models.Model):
+    token = models.CharField(max_length=100, unique=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
 
+
+class AudienceScore(models.Model):
+    audience = models.ForeignKey(Audience)
+    show = models.ForeignKey(Show)
+    magician = models.ForeignKey(Magician)
+
+    score = models.IntegerField()
+
+    class Meta:
+        unique_together=(audience, show, magician)
+
+
+class AudienceAccuracy(models.Model):
+    audience = models.ForeignKey(Audience)
+    show = models.ForeignKey(Show)
+    
+    accuracy = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together=(audience, show, magician)
