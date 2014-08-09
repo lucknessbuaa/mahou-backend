@@ -11,7 +11,6 @@ urlpatterns = patterns('backend.magician_views',
 
 urlpatterns = urlpatterns + patterns('backend.show_views',
     url(r'^show$','show'),
-    url(r'^show/add$','add_show'),
     url(r'^show/delete$','delete_show'),
     url(r'^show/requireMag$','requireMag'),
     url(r'^show/(?P<id>\d+)$','edit_show'),
