@@ -8642,9 +8642,6 @@ td.url a {
 td.cover {
   max-width: 150px;
 }
-td.show {
-  display: table-cell;
-}
 .field {
   position: relative;
   min-height: 1px;

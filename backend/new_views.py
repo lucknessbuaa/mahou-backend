@@ -45,6 +45,9 @@ class NewForm(forms.Form):
     start1 = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
+    scoretime1 = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
     stop1 = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
@@ -69,6 +72,9 @@ class NewForm(forms.Form):
         }))) 
 
     start2 = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
+    scoretime2 = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
     stop2 = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
@@ -97,6 +103,9 @@ class NewForm(forms.Form):
     start3 = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
+    scoretime3 = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
     stop3 = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
@@ -121,6 +130,9 @@ class NewForm(forms.Form):
         }))) 
 
     start4 = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
+    scoretime4 = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
     stop4 = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
@@ -149,6 +161,9 @@ class NewForm(forms.Form):
     start5 = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
+    scoretime5 = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
     stop5 = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
@@ -173,6 +188,9 @@ class NewForm(forms.Form):
         }))) 
 
     start6 = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+
+    scoretime6 = forms.DateTimeField(label="打分时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
     stop6 = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],

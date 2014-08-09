@@ -24,6 +24,7 @@ class Magician_Show(models.Model):
     magician = models.ForeignKey(Magician,verbose_name=u'魔术师',max_length=100)
     show = models.ForeignKey(Show,verbose_name=u'show',max_length=100)
     start = models.DateTimeField()
+    scoretime = models.DateTimeField()
     stop = models.DateTimeField()
     score1 = models.IntegerField(verbose_name=u'score1') 
     score2 = models.IntegerField(verbose_name=u'score2') 
