@@ -4,6 +4,5 @@ venv
 static
 logs
 *.pyc
-ajax_upload/
-ajax_uploads/
 nohup.out
+media
