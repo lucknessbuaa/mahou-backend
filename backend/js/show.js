@@ -89,9 +89,10 @@ define(function(require) {
         },
 
         setShow: function(show) {
-            _.each(['pk', 'magician', 'show', 'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(attr) {
+            _.each(['pk', 'show', 'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(attr) {
                 this.el[attr].value = show[attr];
             }, this));
+            $(this.el.magician).val(show.magician).trigger('change');
             var tempTime1 = moment(show['start'], "MMM DD,YYYY,h:m a");
             this.el['start'].value = tempTime1.format("YYYY-MM-DD HH:mm");
             var tempTime = moment(show['stop'], "MMM DD,YYYY,h:m a");
@@ -125,7 +126,7 @@ define(function(require) {
 
         clear: function() {
             _.each(['pk', 'magcian', 'show',  'start', 'stop', 'score1', 'score2', 'score3'], _.bind(function(field) {
-                $(this.el[field]).val('');
+                $(this.el[field]).val('').trigger('change');
             }, this));
 
             this.clearTip();
