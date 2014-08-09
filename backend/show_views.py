@@ -65,6 +65,7 @@ class ShowTable(tables.Table):
     cover = tables.columns.TemplateColumn(verbose_name='头像', template_name='show_cover.html', orderable=False, accessor='magician.cover')
     show = tables.columns.Column(verbose_name='节目期数', empty_values=(), orderable=False)
     start = tables.columns.DateTimeColumn(verbose_name='开始时间', empty_values=(), orderable=False, format='Y-m-d H:i')
+    scoretime = tables.columns.DateTimeColumn(verbose_name='打分时间', empty_values=(), orderable=False, format='Y-m-d H:i')
     stop = tables.columns.DateTimeColumn(verbose_name='结束时间', empty_values=(), orderable=False, format='Y-m-d H:i')
     score1 = tables.columns.Column(verbose_name='评分一', empty_values=(), orderable=False)
     score2 = tables.columns.Column(verbose_name='评分二', empty_values=(), orderable=False)
@@ -74,7 +75,7 @@ class ShowTable(tables.Table):
     class Meta:
         model = Magician_Show
         empty_text = u'没有节目信息'
-        fields = ('pk', 'show', 'magician', 'cover', 'start', 'stop', 'score1', 'score2', 'score3', 'ops') 
+        fields = ('pk', 'show', 'magician', 'cover', 'start', 'scoretime', 'stop', 'score1', 'score2', 'score3', 'ops') 
         attrs = {
             'class': 'table table-bordered table-striped'
         }
