@@ -39,10 +39,8 @@ def show(request):
     search = False
     if 'q' in request.GET and request.GET['q'] <> "":
         logger.error(request.GET['q'])
-        show = show.filter(Q(speaker__contains=request.GET['q'])|\
-	Q(university__name__contains=request.GET['q'])|\
-	Q(university__city_id__name__contains=request.GET['q'])|\
-	Q(place__contains=request.GET['q']))
+        show = show.filter(Q(magician__name__contains=request.GET['q'])|\
+	Q(show__id__contains=request.GET['q']))
         if not show.exists() :
             search = True
     elif 'q' in request.GET and request.GET['q'] == "":
@@ -265,7 +263,6 @@ def record_score(request):
     magician = Magician.objects.get(pk=magician_id)
 
     AudienceScore(audience=audience, show=show, magician=magician, score=score).save()
-    # TODO add accuracy
     audienceAc = None
     try:
         audienceAc = AudienceAccuracy.objects.get(audience=audience, show=show)
