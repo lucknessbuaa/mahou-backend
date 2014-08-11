@@ -214,13 +214,10 @@ define(function(require) {
             location.href("/backend/new");
         });
 
-        $("table").on("click", ".edit", function() {
-            modal.setTitle('编辑节目信息');
-            modal.setSaveText("保存", "保存中...");
-            var show = $(this).parent().data();
-            $('[name=cover]').val(show.cover).trigger('change');
-            form.setShow(show);
-            modal.show();
+        $('.edit').click(function(){
+            var pk = $(this).parent().data('pk');
+            var locStr = '/backend/new?id=' + pk; 
+            location.href=locStr;
         });
     });
 
