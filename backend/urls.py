@@ -17,6 +17,7 @@ urlpatterns = urlpatterns + patterns('backend.show_views',
     url(r'^api/mobile', 'record_mobile'),
     url(r'^api/stat', 'magician_score'),
     url(r'^api/score$', 'record_score'),
+    url(r'^api/selection$', 'selection'),
     
     # TODO
     url(r'^api/scores', 'scores')

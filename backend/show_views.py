@@ -286,8 +286,8 @@ def record_score(request):
 @csrf_exempt
 @json
 def magician_score(request):
-    show_id = request.POST.get('show_id', None)
-    magician_id = request.POST.get('magician_id', None)
+    show_id = request.GET.get('show_id', None)
+    magician_id = request.GET.get('magician_id', None)
     
     if not show_id or not magician_id:
         return {'ret_code': 1001}
@@ -308,6 +308,22 @@ def magician_score(request):
         'ret_code': 0,
         'percent': percent,
     }
+
+
+@require_GET
+@json
+def selection(request):
+	token = request.GET.get('token', None)
+	show_id = request.GET.get('show_id', None)
+	audience = ensureAudience(token)
+	show = Show.objects.get(pk=show_id)
+
+	myScores = AudienceScore.objects.filter(audience=audience, show=show)
+	myScoreDict = {}
+	for score in myScores:
+		myScoreDict[str(score.magician.pk)] = score.score
+
+	return myScoreDict
 
 
 @require_GET
