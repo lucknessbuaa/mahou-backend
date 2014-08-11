@@ -33,6 +33,9 @@ logger = logging.getLogger(__name__)
 
 class NewForm(forms.Form):
 
+    pk = forms.IntegerField(required=False,
+        widget=forms.HiddenInput(attrs=us.extend({}, fieldAttrs)))
+
     start = forms.DateTimeField(label="开始时间", input_formats=["%Y-%m-%d %H:%M"],
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
@@ -214,18 +217,45 @@ class NewForm(forms.Form):
         widget=forms.TextInput(attrs={"class": "form-control"}))
 
 
+
 @require_GET
 @login_required
 @active_tab('show')
 def new(request):
-    form = NewForm()
+    id = request.GET.get('id', None)
+
+    if id:
+        show = Show.objects.get(pk=id)
+        showdata = Magician_Show.objects.filter(show=show).order_by('pk')
+        formdata = {}
+        formdata['pk'] = id
+        formdata['start'] = show.start.strftime('%Y-%m-%d %H:%M')
+        formdata['stop'] = show.end.strftime('%Y-%m-%d %H:%M')
+        i=1
+        for item in showdata:
+            formdata['name'+str(i)] = item.magician
+            formdata['start'+str(i)] = item.start.strftime('%Y-%m-%d %H:%M')
+            formdata['scoretime'+str(i)] = item.scoretime.strftime('%Y-%m-%d %H:%M')
+            formdata['stop'+str(i)] = item.stop.strftime('%Y-%m-%d %H:%M')
+            formdata['score'+str(i)+str(1)] = item.score1
+            formdata['score'+str(i)+str(2)] = item.score2
+            formdata['score'+str(i)+str(3)] = item.score3
+            i=i+1
+        form = NewForm(formdata)
+    else:
+        form = NewForm()
     return render(request, "new.html", {
         "form": form
     })
 
 
+@active_tab('show')
 @transaction.atomic
 def add_show(form):
+    id = form.cleaned_data['pk']
+    if id:
+        Show.objects.filter(pk=id).delete()
+
     show = Show(start=form.cleaned_data['start'], end=form.cleaned_data['stop'])
     show.save()
 

@@ -2,6 +2,7 @@
 import logging
 from datetime import datetime
 
+from django.db import transaction
 from underscore import _ as us
 from django.db.models import Q
 from django.db import connection
@@ -34,8 +35,8 @@ logger = logging.getLogger(__name__)
 @login_required
 @active_tab('show')
 def show(request):
-    show =  Magician_Show.objects.all()
-    show.order_by('-show')
+    show =  Show.objects.all()
+    show.order_by('-pk')
     search = False
     if 'q' in request.GET and request.GET['q'] <> "":
         logger.error(request.GET['q'])
@@ -61,15 +62,8 @@ def show(request):
 class ShowTable(tables.Table):
 
     pk = tables.columns.Column(verbose_name='顺序', empty_values=(), orderable=False)
-    magician = tables.columns.Column(verbose_name='姓名', empty_values=(), orderable=False)
-    cover = tables.columns.TemplateColumn(verbose_name='头像', template_name='show_cover.html', orderable=False, accessor='magician.cover')
-    show = tables.columns.Column(verbose_name='节目期数', empty_values=(), orderable=False)
     start = tables.columns.DateTimeColumn(verbose_name='开始时间', empty_values=(), orderable=False, format='Y-m-d H:i')
-    scoretime = tables.columns.DateTimeColumn(verbose_name='打分时间', empty_values=(), orderable=False, format='Y-m-d H:i')
-    stop = tables.columns.DateTimeColumn(verbose_name='结束时间', empty_values=(), orderable=False, format='Y-m-d H:i')
-    score1 = tables.columns.Column(verbose_name='评分一', empty_values=(), orderable=False)
-    score2 = tables.columns.Column(verbose_name='评分二', empty_values=(), orderable=False)
-    score3 = tables.columns.Column(verbose_name='评分三', empty_values=(), orderable=False)
+    end = tables.columns.DateTimeColumn(verbose_name='结束时间', empty_values=(), orderable=False, format='Y-m-d H:i')
     ops = tables.columns.TemplateColumn(verbose_name='操作', template_name='show_ops.html', orderable=False)
 
     def render_score1(score1, value):
@@ -103,9 +97,9 @@ class ShowTable(tables.Table):
             return value
 
     class Meta:
-        model = Magician_Show
+        model = Show
         empty_text = u'没有节目信息'
-        fields = ('pk', 'show', 'magician', 'cover', 'start', 'scoretime', 'stop', 'score1', 'score2', 'score3', 'ops') 
+        fields = ('pk', 'start', 'end') 
         attrs = {
             'class': 'table table-bordered table-striped'
         }
@@ -158,34 +152,13 @@ class ShowForm(forms.ModelForm):
     class Meta:
         model = Magician_Show
 
+@transaction.atomic
 @require_POST
 @json
 def delete_show(request):
-    speaker = forms.CharField(label=u"主讲人", required=False,
-        widget=forms.TextInput(attrs=us.extend({}, fieldAttrs, {
-            'parsley-required': '',
-        })))
-
-    wtdate = forms.DateTimeField(label=u"结束时间", input_formats=["%Y-%m-%d %H:%M"],
-        widget=forms.TextInput(attrs={"class": "form-control"}))
-
-    def clean(self):
-        cleaned_data = self.cleaned_data = super(ShowForm, self).clean()
-
-        if cleaned_data["capacity"] > 2000:
-            raise ValidationError('座位数应该在2000以下！')
-       
-        if cleaned_data["cover"] == "False":
-            raise ValidationError('地点图片不能为空！')
-
-        return cleaned_data
-
-    class Meta:
-        model = Talk
-        widgets = {
-            'cover': AjaxClearableFileInput
-        }
-
+    id = request.POST['id']
+    Show.objects.filter(pk=id).delete()
+    return {'ret_code': RET_CODES['ok']}
 
 @require_POST
 @json
@@ -206,7 +179,7 @@ def requireMag(request):
     selectMag = Magician.objects.all()
 
     def mapMag(mag):
-        return {
+         {
             'id': str(mag.pk),
             'type': 'magician',
             'name': mag.name,
