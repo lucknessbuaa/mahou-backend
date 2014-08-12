@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 @login_required
 @active_tab('magician')
 def magician(request):
-    magician = Magician.objects.all()
+    magician = Magician.objects.filter(remove=False)
     search = False
     if 'q' in request.GET and request.GET['q'] <> "":
         logger.error(request.GET['q'])
@@ -102,7 +102,8 @@ def add_magician(request):
 @require_POST
 @json
 def delete_magician(request):
-    Magician.objects.filter(pk=request.POST["id"]).delete()
+    id = request.POST['id']
+    Magician.objects.filter(pk=id).update(remove=True)
     return {'ret_code': RET_CODES['ok']}
 
 

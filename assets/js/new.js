@@ -8594,6 +8594,24 @@ define('new',['require','jquery','jquery.serializeObject','jquery.iframe-transpo
 
         $(form.start).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
         $(form.stop).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.start1).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.start2).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.start3).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.start4).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.start5).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.start6).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.stop1).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.stop2).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.stop3).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.stop4).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.stop5).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.stop6).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.scoretime1).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.scoretime2).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.scoretime3).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.scoretime4).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.scoretime5).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
+        $(form.scoretime6).datetimepicker('setStartDate', moment().format("YYYY-MM-DD HH:mm"));
     });
 });
 

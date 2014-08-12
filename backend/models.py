@@ -7,6 +7,7 @@ from datetime import datetime
 class Magician(models.Model):
     name = models.CharField(verbose_name=u'名称',max_length=100)
     cover = models.CharField(verbose_name=u'头像',max_length=1024)
+    remove = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -15,6 +16,7 @@ class Magician(models.Model):
 class Show(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
+    remove = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.pk
@@ -29,6 +31,7 @@ class Magician_Show(models.Model):
     score1 = models.IntegerField(verbose_name=u'score1') 
     score2 = models.IntegerField(verbose_name=u'score2') 
     score3 = models.IntegerField(verbose_name=u'score3')
+    remove = models.BooleanField(default=False)
      
     
 class Audience(models.Model):

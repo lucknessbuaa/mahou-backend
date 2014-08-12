@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 @login_required
 @active_tab('show')
 def show(request):
-    show =  Show.objects.order_by('-pk')
+    show =  Show.objects.filter(remove=False).order_by('-pk')
     search = False
     if 'q' in request.GET and request.GET['q'] <> "":
         logger.error(request.GET['q'])
@@ -153,7 +153,9 @@ class ShowForm(forms.ModelForm):
 @json
 def delete_show(request):
     id = request.POST['id']
-    Show.objects.filter(pk=id).delete()
+    show = Show.objects.filter(pk=id)
+    Show.objects.filter(pk=id).update(remove=True)
+    Magician_Show.objects.filter(show=show).update(remove=True)
     return {'ret_code': RET_CODES['ok']}
 
 @require_POST
