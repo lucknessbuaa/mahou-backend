@@ -89,6 +89,18 @@ define(function(require) {
                 alert('选手一结束时间应该在打分时间之后！');
                 return false;
             }
+            if(data['score11']==0){
+                alert('评委一评分不能为空！');
+                return false;
+            }
+            if(data['score21']==0){
+                alert('评委二评分不能为空！');
+                return false;
+            }
+            if(data['score31']==0){
+                alert('评委三评分不能为空！');
+                return false;
+            }
 
             //选手二
             if(data['name2']==''){
@@ -108,13 +120,13 @@ define(function(require) {
             }else if(data['stop2'] <= data['scoretime2']||data['stop2']==''){
                 alert('选手二结束时间应该在打分时间之后！');
                 return false;
-            }else if(data['score21']== data['score11']||data['score21']==''){
+            }else if(data['score21']== data['score11']||data['score21']==0){
                 alert('评委一打分重复！');
                 return false;
-            }else if(data['score22']== data['score12']|| data['score22']==''){
+            }else if(data['score22']== data['score12']|| data['score22']==0){
                 alert('评委二打分重复！');
                 return false;
-            }else if(data['score23']== data['score13']||data['score23']==''){
+            }else if(data['score23']== data['score13']||data['score23']==0){
                 alert('评委三打分重复！');
                 return false;
             }
@@ -137,13 +149,13 @@ define(function(require) {
             }else if(data['stop3'] <= data['scoretime3']||data['stop3']==''){
                 alert('选手三结束时间应该在打分时间之后！');
                 return false;
-            }else if(data['score31']== data['score11'] || data['score31']==data['score21'] || data['score31']==''){
+            }else if(data['score31']== data['score11'] || data['score31']==data['score21'] || data['score31']==0){
                 alert('评委一打分重复！');
                 return false;
-            }else if(data['score32']== data['score12'] || data['score32']==data['score22']|| data['score32']==''){
+            }else if(data['score32']== data['score12'] || data['score32']==data['score22']|| data['score32']==0){
                 alert('评委二打分重复！');
                 return false;
-            }else if(data['score33']== data['score13'] || data['score33']==data['score23']||data['score33']==''){
+            }else if(data['score33']== data['score13'] || data['score33']==data['score23']||data['score33']==0){
                 alert('评委三打分重复！');
                 return false;
             }
@@ -167,7 +179,7 @@ define(function(require) {
                 alert('选手四结束时间应该在打分时间之后！');
                 return false;
             }
-            if(data['score41']==''){
+            if(data['score41']==0){
                 alert('评委一评分不能为空！');
                 return false;
             }
@@ -177,7 +189,7 @@ define(function(require) {
                     return false;
                 }
             }
-            if(data['score42']==''){
+            if(data['score42']==0){
                 alert('评委二评分不能为空！');
                 return false;
             }
@@ -187,7 +199,7 @@ define(function(require) {
                     return false;
                 }
             }
-            if(data['score43']==''){
+            if(data['score43']==0){
                 alert('评委三评分不能为空！');
                 return false;
             }
@@ -217,7 +229,7 @@ define(function(require) {
                 alert('选手五结束时间应该在打分时间之后！');
                 return false;
             }
-            if(data['score51']==''){
+            if(data['score51']==0){
                 alert('评委一评分不能为空！');
                 return false;
             }
@@ -227,7 +239,7 @@ define(function(require) {
                     return false;
                 }
             }
-            if(data['score52']==''){
+            if(data['score52']==0){
                 alert('评委二评分不能为空！');
                 return false;
             }
@@ -237,7 +249,7 @@ define(function(require) {
                     return false;
                 }
             }
-            if(data['score53']==''){
+            if(data['score53']==0){
                 alert('评委三评分不能为空！');
                 return false;
             }
@@ -267,7 +279,7 @@ define(function(require) {
                 alert('选手六结束时间应该在打分时间之后！');
                 return false;
             }
-            if(data['score61']==''){
+            if(data['score61']==0){
                 alert('评委一评分不能为空！');
                 return false;
             }
@@ -277,7 +289,7 @@ define(function(require) {
                     return false;
                 }
             }
-            if(data['score62']==''){
+            if(data['score62']==0){
                 alert('评委二评分不能为空！');
                 return false;
             }
@@ -287,7 +299,7 @@ define(function(require) {
                     return false;
                 }
             }
-            if(data['score63']==''){
+            if(data['score63']==0){
                 alert('评委三评分不能为空！');
                 return false;
             }
