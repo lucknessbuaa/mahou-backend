@@ -35,15 +35,11 @@ logger = logging.getLogger(__name__)
 @login_required
 @active_tab('show')
 def show(request):
-    show =  Show.objects.all()
-    show.order_by('-pk')
+    show =  Show.objects.order_by('-pk')
     search = False
     if 'q' in request.GET and request.GET['q'] <> "":
         logger.error(request.GET['q'])
-        show = show.filter(Q(speaker__contains=request.GET['q'])|\
-	Q(university__name__contains=request.GET['q'])|\
-	Q(university__city_id__name__contains=request.GET['q'])|\
-	Q(place__contains=request.GET['q']))
+        show = show.filter(pk=request.GET['q'])
         if not show.exists() :
             search = True
     elif 'q' in request.GET and request.GET['q'] == "":
@@ -61,7 +57,7 @@ def show(request):
 
 class ShowTable(tables.Table):
 
-    pk = tables.columns.Column(verbose_name='顺序', empty_values=(), orderable=False)
+    pk = tables.columns.Column(verbose_name='顺序', empty_values=())
     start = tables.columns.DateTimeColumn(verbose_name='开始时间', empty_values=(), orderable=False, format='Y-m-d H:i')
     end = tables.columns.DateTimeColumn(verbose_name='结束时间', empty_values=(), orderable=False, format='Y-m-d H:i')
     ops = tables.columns.TemplateColumn(verbose_name='操作', template_name='show_ops.html', orderable=False)
